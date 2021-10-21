@@ -14,21 +14,14 @@ defmodule Anibot.Consumer do
       String.starts_with?(msg.content, "!search_anime") ->
         searchAnime(msg)
 
-
-
       String.starts_with?(msg.content, "!character_quote") ->
         evaluate_character_quote(msg)
 
-
-
       String.starts_with?(msg.content, "!anime_curiosity") ->
-        animeFact(msg)
-
+        animeCuriosity(msg)
 
       String.starts_with?(msg.content, "!pokemon_card") ->
         searchPokemonCard(msg)
-
-
 
       String.starts_with?(msg.content, "!help") ->
         Api.create_message(
@@ -88,11 +81,12 @@ defmodule Anibot.Consumer do
     end
   end
 
-  defp animeFact(msg) do
+  defp animeCuriosity(msg) do
     aux = String.split(msg.content, " ", parts: 2)
     animeName = Enum.fetch!(aux, 1)
 
-    url = "https://anime-facts-rest-api.herokuapp.com/api/v1/#{animeName}"
+    url =
+      "https://anime-facts-rest-api.herokuapp.com/api/v1/#{String.replace(animeName, " ", "_")}"
 
     response = HTTPoison.get!(url)
 
@@ -102,16 +96,18 @@ defmodule Anibot.Consumer do
 
         data = json["data"]
         img = json["img"]
+        totalFacts = json["total_facts"]
 
         fact = Enum.map(data, fn dataMap -> dataMap["fact"] end)
 
-        rng = Enum.random(0..10)
+        rng = Enum.random(0..totalFacts)
         quote_first = Enum.at(fact, rng)
 
         Api.create_message(
           msg.channel_id,
           " **Nome do anime**: #{animeName} \n **Curiosidade**: #{quote_first}"
         )
+
         Api.create_message(
           msg.channel_id,
           "#{img}"
@@ -122,13 +118,14 @@ defmodule Anibot.Consumer do
           msg.channel_id,
           "Não achamos nenhum anime com esse nome."
         )
+
       _ ->
         Api.create_message(msg.channel_id, "Erro ao se comunicar com a API")
     end
   end
 
   defp searchManga(msg) do
-     aux = String.split(msg.content, " ", parts: 2)
+    aux = String.split(msg.content, " ", parts: 2)
     mangaName = Enum.fetch!(aux, 1)
 
     if String.length(mangaName) >= 3 do
@@ -147,7 +144,6 @@ defmodule Anibot.Consumer do
           description = Enum.map(data, fn dataMap -> dataMap["synopsis"] end)
           nota = Enum.map(data, fn dataMap -> dataMap["score"] end)
           image = Enum.map(data, fn dataMap -> dataMap["image_url"] end)
-
 
           title_first = Enum.at(title, 0)
           chapters_first = Enum.at(chapters, 0)
@@ -176,9 +172,9 @@ defmodule Anibot.Consumer do
       end
     else
       Api.create_message(
-            msg.channel_id,
-            "Nome do mangá precisa ter pelo menos 3 letras"
-          )
+        msg.channel_id,
+        "Nome do mangá precisa ter pelo menos 3 letras"
+      )
     end
   end
 
@@ -202,7 +198,6 @@ defmodule Anibot.Consumer do
           description = Enum.map(data, fn dataMap -> dataMap["synopsis"] end)
           nota = Enum.map(data, fn dataMap -> dataMap["score"] end)
           image = Enum.map(data, fn dataMap -> dataMap["image_url"] end)
-
 
           title_first = Enum.at(title, 0)
           eps_first = Enum.at(eps, 0)
@@ -231,9 +226,9 @@ defmodule Anibot.Consumer do
       end
     else
       Api.create_message(
-            msg.channel_id,
-            "Nome do anime precisa ter pelo menos 3 letras"
-          )
+        msg.channel_id,
+        "Nome do anime precisa ter pelo menos 3 letras"
+      )
     end
   end
 
@@ -280,5 +275,4 @@ defmodule Anibot.Consumer do
         Api.create_message(msg.channel_id, "Erro ao se comunicar com a API")
     end
   end
-
 end
