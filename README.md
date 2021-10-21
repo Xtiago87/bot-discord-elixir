@@ -8,7 +8,7 @@ Bot feito por:
 O proposito do nosso primeiro comando é o usuário escrever um nome de um mangá para ser pesquisado pelo bot e ele retornar o nome, quantidade de capítulos, nota, uma descrição e uma foto do mangá.
 E essa é a forma de usar esse comando:
 ```bash
-!search_manga nome do manga
+!search_manga nome do mangá
 ```
 ## Comando 2
 O proposito do nosso segundo comando é o usuário escrever o nome de um anime para ser pesquisado pelo bot e ele retornar o nome, quantidade de episódios, nota, uma descrição e uma foto do anime.
