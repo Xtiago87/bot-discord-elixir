@@ -1,5 +1,4 @@
 ## Equipe
-
 Bot feito por:
 - Tiago Halliday Goiana - 1910470
 - Felipe Alves Holanda - 1910455
@@ -26,10 +25,10 @@ E essa é a forma de usar esse comando:
 O proposito do nosso quarto comando é o usuário escrever o nome de um anime que ele gosta e o bot retornar para ele uma curiosidade sobre o anime.
 E essa é a forma de usar esse comando:
 ```bash
-!anime_curiosity nome do anime
+!anime_curiosity nome_do_anime
 ```
 ## Comando 5
-O proposito do nosso quinto comando é o usuário escrever o nome de um pokemon que ele goste e o bot retornar para ele a carta desse pokemon.
+O proposito do nosso quinto comando é o usuário escrever o nome de um pokemon e o bot retornar para ele a carta desse pokemon.
 E essa é a forma de usar esse comando:
 ```bash
 !pokemon_card nome do pokemon
