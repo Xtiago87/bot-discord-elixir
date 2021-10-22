@@ -14,7 +14,7 @@ defmodule Anibot.Consumer do
       String.starts_with?(msg.content, "!search_anime") ->
         searchAnime(msg)
 
-      String.starts_with?(msg.content, "!character_quote") ->
+      String.starts_with?(msg.content, "!search_anime") ->
         evaluate_character_quote(msg)
 
       String.starts_with?(msg.content, "!anime_curiosity") ->
@@ -26,13 +26,13 @@ defmodule Anibot.Consumer do
       String.starts_with?(msg.content, "!help") ->
         Api.create_message(
           msg.channel_id,
-          "Comandos disponiveis: \n !search_anime nome do anime \n !fact nome do anime \n !character_quote nome do anime \n !pokemon_card nome do pokemon\n !search_manga nome do mangá"
+          "Comandos disponiveis: \n !search_anime nome do anime \n !anime_curiosity nome_do_anime \n !character_quote nome do anime \n !pokemon_card nome do pokemon\n !search_manga nome do mangá"
         )
 
       String.starts_with?(msg.content, "!") ->
         Api.create_message(
           msg.channel_id,
-          "Comando indisponivel. Comandos disponiveis: \n !search_anime nome do anime \n !fact nome do anime \n !character_quote nome do anime \n !pokemon_card nome do pokemon\n !search_manga nome do mangá"
+          "Comando indisponivel. Comandos disponiveis: \n !search_anime nome do anime \n !anime_curiosity nome_do_anime \n !character_quote nome do anime \n !pokemon_card nome do pokemon\n !search_manga nome do mangá"
         )
 
       true ->
@@ -67,7 +67,7 @@ defmodule Anibot.Consumer do
 
         Api.create_message(
           msg.channel_id,
-          " **Nome do anime**: #{nome_first} \n **Personagem**: #{personagem_first} \n **Quote**: #{quote_first}"
+          " **Nome do anime**: #{nome_first} \n **Personagem**: #{personagem_first} \n **Frase**: #{quote_first}"
         )
 
       404 ->
@@ -101,11 +101,11 @@ defmodule Anibot.Consumer do
         fact = Enum.map(data, fn dataMap -> dataMap["fact"] end)
 
         rng = Enum.random(0..totalFacts)
-        quote_first = Enum.at(fact, rng)
+        quote = Enum.at(fact, rng)
 
         Api.create_message(
           msg.channel_id,
-          " **Nome do anime**: #{animeName} \n **Curiosidade**: #{quote_first}"
+          " **Nome do anime**: #{animeName} \n **Curiosidade**: #{quote}"
         )
 
         Api.create_message(
@@ -113,7 +113,7 @@ defmodule Anibot.Consumer do
           "#{img}"
         )
 
-      400 ->
+      404 ->
         Api.create_message(
           msg.channel_id,
           "Não achamos nenhum anime com esse nome."
@@ -153,7 +153,7 @@ defmodule Anibot.Consumer do
 
           Api.create_message(
             msg.channel_id,
-            "**Nome**: #{title_first} \n **Numero de capítulos**: #{chapters_first} \n **Descricao**: #{description_first} \n **Nota**: #{nota_first}/10"
+            "**Nome**: #{title_first} \n **Número de capítulos**: #{chapters_first} \n **Descrição**: #{description_first} \n **Nota**: #{nota_first}/10"
           )
 
           Api.create_message(
@@ -207,7 +207,7 @@ defmodule Anibot.Consumer do
 
           Api.create_message(
             msg.channel_id,
-            "**Nome**: #{title_first} \n **Numero de eps**: #{eps_first} \n **Descricao**: #{description_first} \n **Nota**: #{nota_first}/10"
+            "**Nome**: #{title_first} \n **Número de eps**: #{eps_first} \n **Descrição**: #{description_first} \n **Nota**: #{nota_first}/10"
           )
 
           Api.create_message(
@@ -237,9 +237,7 @@ defmodule Anibot.Consumer do
     pokemonName = Enum.fetch!(aux, 1)
 
     url = "https://api.pokemontcg.io/v2/cards?q=name:#{pokemonName}"
-    # gyazo
-    # sharex
-    # liteshot
+    
     response = HTTPoison.get!(url)
 
     case response.status_code do
